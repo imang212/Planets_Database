@@ -1,12 +1,12 @@
-## Kosmická databáze
+# Kosmická databáze
 
-__Model databáze__
+### __Model databáze__
 
 ![postgres - public](https://github.com/user-attachments/assets/c59531e7-c6d6-439e-b75b-8f1fd7d49c5b)
 
 Model databáze vytvoření pomocí DBeaver.
 
-__Načtení databáze__
+### __Načtení databáze__
 
 Databázi si můžeme načíst pomocí nahraného souboru **"planety_postgre.sql**". Stačí zkopírovat kód do Postgresql databáze, spustit ho jako celek a potom by se měla objevit ve Vaší databázi. Tento kód funguje pouze pro postgresql databázi.   
 
