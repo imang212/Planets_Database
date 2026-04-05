@@ -8,13 +8,6 @@
 # 🌌 Cosmic Database (Space Objects)
 > This project is a comprehensive **Relational Database Management System (RDBS)** designed to store and analyze astronomical data. It features a robust schema for celestial bodies (planets, stars, moons) including their physical properties, chemical compositions, and discovery history.
 
-The repository demonstrates advanced PostgreSQL capabilities, including:
-* **Relational Modeling**: A complex schema representing hierarchical relationships between stars and planets.
-* **Advanced SQL**: Recursive queries (CTE) for inheritance, analytical functions, and optimized indices.
-* **Database Programming**: Custom PL/pgSQL functions, procedures for transactions, and automated triggers for auditing.
-* **ORM Integration**: A Python-based Object-Relational Mapping (ORM) implementation using SQLAlchemy.
-
-## Database Model
 ```mermaid
 erDiagram
     Teleso ||--o{ Vzdalenost : "id_tel"
@@ -111,6 +104,12 @@ erDiagram
         string typ
     }
 ```
+
+The repository demonstrates advanced PostgreSQL capabilities, including:
+* **Relational Modeling**: A complex schema representing hierarchical relationships between stars and planets.
+* **Advanced SQL**: Recursive queries (CTE) for inheritance, analytical functions, and optimized indices.
+* **Database Programming**: Custom PL/pgSQL functions, procedures for transactions, and automated triggers for auditing.
+* **ORM Integration**: A Python-based Object-Relational Mapping (ORM) implementation using SQLAlchemy.
 
 ## Loading the Database
 You can load the database using the provided file **"planety_postgre.sql"**. Simply copy the code into your PostgreSQL database and run it as a script. 
