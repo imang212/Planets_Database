@@ -10,16 +10,27 @@
 
 ```mermaid
 erDiagram
-    Teleso ||--o{ Vzdalenost : "id_tel"
-    Teleso ||--o{ Slozeni : "id_tel"
-    Teleso ||--o{ Objev : "id_tel"
-    Teleso ||--o{ Typ_telesa : "je typu"
+    %% Core Entities and Relationships
+    %% Telelo (Body) is the central table connected to distances, composition, and discoveries
+    Teleso ||--o{ Vzdalenost : "measured by id_tel"
+    Teleso ||--o{ Slozeni : "analyzed by id_tel"
+    Teleso ||--o{ Objev : "recorded by id_tel"
+    Teleso ||--o{ Typ_telesa : "categorized as"
+    
+    %% Chemical and Physical Composition
+    %% Elements (Prvky) and Compounds (Slouceniny) make up the Composition (Slozeni)
     Prvky ||--o{ Slozeni : "id_prv"
     Slouceniny ||--o{ Slozeni : "id_slouc"
-    Prvky ||--o{ Slouceniny : "tvori"
+    Prvky ||--o{ Slouceniny : "creates"
+
+    %% History and Discovery
+    %% Objevitel (Discoverer) performs the discovery (Objev)
     Objevitel ||--o{ Objev : "id_jme"
-    Typ_telesa ||--o{ Typy_hvezd : "specifikuje"
-    Typ_telesa ||--o{ Typy_planet : "specifikuje"
+
+    %% Body Type Specialization
+    %% Type (Typ_telesa) specifies if it's a Star (Typy_hvezd) or Planet (Typy_planet)
+    Typ_telesa ||--o{ Typy_hvezd : "specify star type"
+    Typ_telesa ||--o{ Typy_planet : "specify planet type"
     Teleso {
         int id_tel PK
         string nazev
@@ -37,6 +48,7 @@ erDiagram
         int id_mat_hve FK
         int id_pla FK
     }
+    %% Distance properties (AU units)
     Vzdalenost {
         int id_vzd PK
         float vzd_od_zeme_AU
@@ -44,12 +56,14 @@ erDiagram
         float vzd_od_slunce_max_AU
         int id_tel FK
     }
+    %% Chemical makeup percentages
     Slozeni {
         int id_pla PK
         int id_prv FK
         int id_slouc FK
         float vyskyt_pct
     }
+    %% Periodic table elements
     Prvky {
         int id_prv PK
         string nazev
@@ -59,6 +73,7 @@ erDiagram
         float elektronegativita
         string skupina
     }
+    %% Chemical compounds
     Slouceniny {
         int id_slouc PK
         string nazev
@@ -68,6 +83,7 @@ erDiagram
         int id_prv2 FK
         int pocet_molekul_2
     }
+    %% Discovery records
     Objev {
         int id_obj PK
         string objevitel
@@ -75,6 +91,7 @@ erDiagram
         date datum_objevu
         int id_jme FK
     }
+    %% Discoverer's personal details
     Objevitel {
         int id_jme PK
         string jmeno
@@ -90,6 +107,7 @@ erDiagram
         int id_hve FK
         int id_pla FK
     }
+    %% Specific star classifications
     Typy_hvezd {
         int id_hve PK
         string typ
@@ -99,6 +117,7 @@ erDiagram
         float zastoupeni_pct
         int zivotnost_mil_let
     }
+    %% Specific planet classifications
     Typy_planet {
         int id_pla PK
         string typ
