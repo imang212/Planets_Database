@@ -1,4 +1,3 @@
-#MySQL
 CREATE DATABASE IF NOT EXISTS planety DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_czech_ci; USE planety;
 
 DROP TABLE IF EXISTS Typy_hvezd;

@@ -1,17 +1,137 @@
-# Kosmická databáze
+<p align="left">
+  <img src="https://img.shields.io/badge/Database-PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" />
+  <img src="https://img.shields.io/badge/Language-SQL-orange?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Education-freeCodeCamp-blue?style=for-the-badge&logo=freecodecamp" />
+</p>
 
-### __Model databáze__
+# 🌌 Kosmická databáze
+>Tento projekt je komplexní systém pro správu relačních databází (RDBS) navržený pro ukládání a analýzu astronomických dat. Obsahuje robustní schéma pro nebeská tělesa (planety, hvězdy, měsíce) včetně jejich fyzikálních vlastností, chemického složení a historie objevů.
 
-![postgres - public](https://github.com/user-attachments/assets/c59531e7-c6d6-439e-b75b-8f1fd7d49c5b)
+**Diagram databáze:**
+```mermaid
+erDiagram
+    Teleso ||--o{ Vzdalenost : "id_tel"
+    Teleso ||--o{ Slozeni : "id_tel"
+    Teleso ||--o{ Objev : "id_tel"
+    Teleso ||--o{ Typ_telesa : "je typu"
+    Prvky ||--o{ Slozeni : "id_prv"
+    Slouceniny ||--o{ Slozeni : "id_slouc"
+    Prvky ||--o{ Slouceniny : "tvori"
+    Objevitel ||--o{ Objev : "id_jme"
+    Typ_telesa ||--o{ Typy_hvezd : "specifikuje"
+    Typ_telesa ||--o{ Typy_planet : "specifikuje"
+    Teleso {
+        int id_tel PK
+        string nazev
+        string symbol
+        int id_typ_tel FK
+        int prumer_km
+        int hmotnost_kg
+        float hustota_gcm3
+        float gravitace_ms2
+        int min_teplota_K
+        int prum_teplota_K
+        int max_teplota_K
+        int rychlost_rotace_kmh
+        int perioda_d
+        int id_mat_hve FK
+        int id_pla FK
+    }
+    Vzdalenost {
+        int id_vzd PK
+        float vzd_od_zeme_AU
+        float vzd_od_slunce_min_AU
+        float vzd_od_slunce_max_AU
+        int id_tel FK
+    }
+    Slozeni {
+        int id_pla PK
+        int id_prv FK
+        int id_slouc FK
+        float vyskyt_pct
+    }
+    Prvky {
+        int id_prv PK
+        string nazev
+        string zkratka
+        int protonove_cislo
+        float relativni_atomova_hmotnost
+        float elektronegativita
+        string skupina
+    }
+    Slouceniny {
+        int id_slouc PK
+        string nazev
+        string zkratka
+        int id_prv1 FK
+        int pocet_molekul_1
+        int id_prv2 FK
+        int pocet_molekul_2
+    }
+    Objev {
+        int id_obj PK
+        string objevitel
+        int id_pla FK
+        date datum_objevu
+        int id_jme FK
+    }
+    Objevitel {
+        int id_jme PK
+        string jmeno
+        string prijmeni
+        date datum_narozeni
+        string zeme_narozeni
+        string misto_narozeni
+        string puvod
+    }
+    Typ_telesa {
+        int id_typ PK
+        string nazev
+        int id_hve FK
+        int id_pla FK
+    }
+    Typy_hvezd {
+        int id_hve PK
+        string typ
+        string spektralni_trida
+        string barva
+        int teplota_K
+        float zastoupeni_pct
+        int zivotnost_mil_let
+    }
+    Typy_planet {
+        int id_pla PK
+        string typ
+    }
+```
 
 Model databáze vytvoření pomocí DBeaver.
 
+### Instalace
+Ujistěte se, že máte v systému nainstalovaný Python 3.11+ a PostreSQL (server)
+
+Nejprve naklonujte repozitář a nainstalujte potřebné knihovny:
+```bash
+git clone https://github.com/imang212/Planets_Database.git
+cd Planets_Database
+
+pip install sqlalchemy psycopg2
+```
+>Poznámka: psycopg2 slouží jako adaptér pro propojení Pythonu s PostgreSQL.
+
 ### __Načtení databáze__
 
-Databázi si můžeme načíst pomocí nahraného souboru **"planety_postgre.sql**". Stačí zkopírovat kód do Postgresql databáze, spustit ho jako celek a potom by se měla objevit ve Vaší databázi. Tento kód funguje pouze pro postgresql databázi.   
+Databázi můžete načíst pomocí přiloženého souboru "planets_postgre_initialize.sql" v programech **pgAdmin** nebo **DBeaver**. Jednoduše zkopírujte kód do své PostgreSQL databáze a spusťte jej jako skript.
+>**Poznámka:** Tento skript je kompatibilní pouze s PostgreSQL.
+
+Případně můžete spustit inicializační skript databáze přímo v terminálu (bash):
+```bash
+sql -U postgres < planets_postgre_initialize.sql
+```
 
 ### Příkazy
-A teď se pojďme podívat na příkazy, které jsem udělal v rámci seminární práce na předmět RDBS(Relační databázové systémy). Jsou uloženy v souboru **"planety_prikazy_postgre.sql**"
+A teď se pojďme podívat na příkazy, které jsem udělal v rámci seminární práce na předmět RDBS(Relační databázové systémy). Jsou uloženy v souboru **"planets_commands_postgre.sql**"
 
 __SELECT pro výpočet průměrné počtu záznamů na tabulku__
 ```sql
@@ -390,8 +510,25 @@ REVOKE CONNECT ON DATABASE postgres FROM PUBLIC;
 GRANT CONNECT ON DATABASE postgres TO PUBLIC;
 ```
 __ORM(Object relation mapping)__
+Tento skript používá SQLAlchemy a Psycopg2 v Pythonu.
+Kód se nachází v souboru "orm_script.py".
 
-Nakonec mám object relation mapping. Kde jsem k připojení využil sqlalchemy a psycopg2 knihovnu. Kód je v souboru **"orm.py"**. 
+**Aktualizujte připojovací řetězec ve skriptu tak, aby byl identický s údaji ve vaší databázi.**:
+```bash
+# Formát: postgresql://username:<password>@localhost:5432/<database_name>
+DATABASE_URL = "postgresql://<username>:<your_password>@localhost:5432/<database_name>"
+```
+
+**Spuštění skriptu.:**
+```bash
+python orm_script.py
+```
+
+**Vlastnosti:**
+- Modely databázových tabulek založené na třídách.
+- Správa relací.
+- Funkce pro vkládání objektů, změnu hodnot pomocí transakcí a zobrazení dat.
+
 ```python
 from sqlalchemy import create_engine, Column, Integer, String, Numeric, DateTime, func
 from sqlalchemy.ext.declarative import declarative_base

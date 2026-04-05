@@ -111,12 +111,29 @@ The repository demonstrates advanced PostgreSQL capabilities, including:
 * **Database Programming**: Custom PL/pgSQL functions, procedures for transactions, and automated triggers for auditing.
 * **ORM Integration**: A Python-based Object-Relational Mapping (ORM) implementation using SQLAlchemy.
 
+## Installation
+Make sure you have Python 3.11+ and PostgreSQL installed and running on your system.
+
+Clone the repository and install the required Python libraries:
+```bash
+git clone https://github.com/imang212/Planets_Database.git
+cd Planets_Database
+
+pip install sqlalchemy psycopg2
+```
+>**Note:** psycopg2 is the PostgreSQL adapter for Python.
+
 ## Loading the Database
-You can load the database using the provided file **"planety_postgre.sql"**. Simply copy the code into your PostgreSQL database and run it as a script. 
+You can load the database using the provided file **"planets_postgre_initialize.sql"** in **pgAdmin** or in **DBeaver** program. Simply copy the code into your PostgreSQL database and run it as a script. 
 > **Note:** This script is compatible with PostgreSQL only.
 
+Or you can run the database initialization script in bash
+```bash
+psql -U postgres < planets_postgre_initialize.sql
+```
+
 ## SQL Commands
-The following commands were developed as part of a seminar project for the RDBS (Relational Database Systems) course. They are stored in the file **"planety_prikazy_postgre.sql"**.
+The following commands were developed as part of a seminar project for the RDBS (Relational Database Systems) course. They are stored in the file **"planets_commands_postgre.sql"**.
 
 #### SELECT to Calculate Average Number of Records per Table
 ```sql
@@ -166,7 +183,6 @@ LIMIT 4
 
 #### Recursive SELECT (SELF_JOIN)
 Hierarchy of Planets and their Moons:
-
 ``` sql
 with recursive planet_inheritance AS(
   SELECT t.id_pla, (SELECT nazev FROM "Teleso" s WHERE s.id_tel = t.id_pla) AS "Planet Name",
@@ -224,7 +240,6 @@ $$ language sql;
 
 ### Procedure -- Gravity Range
 Returns a table of bodies within a specific gravity range.
-
 ``` sql
 CREATE OR REPLACE PROCEDURE Get_gravity(min_grav numeric, max_grav numeric) 
 AS $$
@@ -234,7 +249,6 @@ AS $$
 
 #### Trigger
 Automated auditing for the "Teleso" table. Every insertion is logged into the teleso_action table.
-
 ``` sql
 CREATE TRIGGER teleso_insert_after
 AFTER INSERT ON "Teleso"
@@ -244,7 +258,6 @@ EXECUTE FUNCTION teleso_insert();
 
 #### Transactions
 A procedure demonstrating safe data transfer (subtracting diameter from one body and adding it to another) with error handling and ROLLBACK capability.
-
 ``` sql
 CALL change_planet_diameter('Jupiter','Mercury',100000);
 -- Use COMMIT to save or ROLLBACK to undo.
@@ -252,7 +265,6 @@ CALL change_planet_diameter('Jupiter','Mercury',100000);
 
 #### Users and Role management
 Examples of creating users, roles, and assigning specific privileges.
-
 ```sql
 CREATE USER patrik WITH PASSWORD 'patrik123456';
 GRANT CONNECT ON DATABASE postgres TO patrik;
@@ -262,7 +274,7 @@ GRANT SELECT ON TABLE "Teleso" TO selecting_role;
 
 #### Locking
 Examples of table locking modes (SHARE MODE, ACCESS EXCLUSIVE MODE).
-```
+```sql
 BEGIN WORK;
 LOCK TABLE "Teleso" in ACCESS EXCLUSIVE MODE;
 SELECT * FROM "Teleso" WHERE id_tel = 1;
@@ -272,8 +284,19 @@ COMMIT WORK;
 ```
 
 ## ORM (Object Relational Mapping)
-The project includes a Python implementation using SQLAlchemy and Psycopg2.
-The code is located in "orm.py".
+This script using SQLAlchemy and Psycopg2 in python.
+The code is located in "orm_script.py".
+
+**Update the connection string in the script identical with credentials in your database.**:
+```bash
+# Format: postgresql://username:<password>@localhost:5432/<database_name>
+DATABASE_URL = "postgresql://<username>:<your_password>@localhost:5432/<database_name>"
+```
+
+**Running the script.:**
+```bash
+python orm_script.py
+```
 
 **Features:**
 - Class-based models for database tables.
