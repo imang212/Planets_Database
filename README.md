@@ -1,6 +1,12 @@
-# Cosmic Database (Space Objects)
-## 🌌 Introduction
-This project is a comprehensive **Relational Database Management System (RDBS)** designed to store and analyze astronomical data. It features a robust schema for celestial bodies (planets, stars, moons) including their physical properties, chemical compositions, and discovery history.
+<p align="left">
+  <img src="https://img.shields.io/badge/Database-PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" />
+  <img src="https://img.shields.io/badge/Language-SQL-orange?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Education-freeCodeCamp-blue?style=for-the-badge&logo=freecodecamp" />
+</p>
+
+# 🌌 Cosmic Database (Space Objects)
+> This project is a comprehensive **Relational Database Management System (RDBS)** designed to store and analyze astronomical data. It features a robust schema for celestial bodies (planets, stars, moons) including their physical properties, chemical compositions, and discovery history.
 
 The repository demonstrates advanced PostgreSQL capabilities, including:
 * **Relational Modeling**: A complex schema representing hierarchical relationships between stars and planets.
@@ -9,9 +15,102 @@ The repository demonstrates advanced PostgreSQL capabilities, including:
 * **ORM Integration**: A Python-based Object-Relational Mapping (ORM) implementation using SQLAlchemy.
 
 ## Database Model
-![postgres - public](https://github.com/user-attachments/assets/c59531e7-c6d6-439e-b75b-8f1fd7d49c5b)
-
-*Database model created using DBeaver.*
+```mermaid
+erDiagram
+    Teleso ||--o{ Vzdalenost : "id_tel"
+    Teleso ||--o{ Slozeni : "id_tel"
+    Teleso ||--o{ Objev : "id_tel"
+    Teleso ||--o{ Typ_telesa : "je typu"
+    Prvky ||--o{ Slozeni : "id_prv"
+    Slouceniny ||--o{ Slozeni : "id_slouc"
+    Prvky ||--o{ Slouceniny : "tvori"
+    Objevitel ||--o{ Objev : "id_jme"
+    Typ_telesa ||--o{ Typy_hvezd : "specifikuje"
+    Typ_telesa ||--o{ Typy_planet : "specifikuje"
+    Teleso {
+        int id_tel PK
+        string nazev
+        string symbol
+        int id_typ_tel FK
+        int prumer_km
+        int hmotnost_kg
+        float hustota_gcm3
+        float gravitace_ms2
+        int min_teplota_K
+        int prum_teplota_K
+        int max_teplota_K
+        int rychlost_rotace_kmh
+        int perioda_d
+        int id_mat_hve FK
+        int id_pla FK
+    }
+    Vzdalenost {
+        int id_vzd PK
+        float vzd_od_zeme_AU
+        float vzd_od_slunce_min_AU
+        float vzd_od_slunce_max_AU
+        int id_tel FK
+    }
+    Slozeni {
+        int id_pla PK
+        int id_prv FK
+        int id_slouc FK
+        float vyskyt_pct
+    }
+    Prvky {
+        int id_prv PK
+        string nazev
+        string zkratka
+        int protonove_cislo
+        float relativni_atomova_hmotnost
+        float elektronegativita
+        string skupina
+    }
+    Slouceniny {
+        int id_slouc PK
+        string nazev
+        string zkratka
+        int id_prv1 FK
+        int pocet_molekul_1
+        int id_prv2 FK
+        int pocet_molekul_2
+    }
+    Objev {
+        int id_obj PK
+        string objevitel
+        int id_pla FK
+        date datum_objevu
+        int id_jme FK
+    }
+    Objevitel {
+        int id_jme PK
+        string jmeno
+        string prijmeni
+        date datum_narozeni
+        string zeme_narozeni
+        string misto_narozeni
+        string puvod
+    }
+    Typ_telesa {
+        int id_typ PK
+        string nazev
+        int id_hve FK
+        int id_pla FK
+    }
+    Typy_hvezd {
+        int id_hve PK
+        string typ
+        string spektralni_trida
+        string barva
+        int teplota_K
+        float zastoupeni_pct
+        int zivotnost_mil_let
+    }
+    Typy_planet {
+        int id_pla PK
+        string typ
+    }
+```
 
 ## Loading the Database
 You can load the database using the provided file **"planety_postgre.sql"**. Simply copy the code into your PostgreSQL database and run it as a script. 
