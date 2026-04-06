@@ -6,7 +6,7 @@
 </p>
 
 # 🌌 Cosmic Database (Space Objects)
-> This project is a comprehensive **Relational Database Management System (RDBS)** designed to store and analyze astronomical data. It features a robust schema for celestial bodies (planets, stars, moons) including their physical properties, chemical compositions, and discovery history.
+This project is a comprehensive **Relational Database Management System (RDBS)** designed to store and analyze astronomical data. It features a robust schema for celestial bodies (planets, stars, moons) including their physical properties, chemical compositions, and discovery history.
 
 ```mermaid
 erDiagram
